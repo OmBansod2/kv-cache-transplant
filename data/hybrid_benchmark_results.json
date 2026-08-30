@@ -6,7 +6,7 @@
       "transplanted_count": 28,
       "loss": 2.990234375,
       "perplexity": 19.89034374461794,
-      "prefill_ms": 343.9615830002367
+      "prefill_ms": 331.2728750001952
     },
     {
       "label": "Hybrid (24/28)",
@@ -14,7 +14,7 @@
       "transplanted_count": 24,
       "loss": 2.912109375,
       "perplexity": 18.39556080667227,
-      "prefill_ms": 159.76995900018665
+      "prefill_ms": 160.24412500019025
     },
     {
       "label": "Hybrid (20/28)",
@@ -22,7 +22,7 @@
       "transplanted_count": 20,
       "loss": 2.8828125,
       "perplexity": 17.864446345871784,
-      "prefill_ms": 158.37358299995685
+      "prefill_ms": 159.81908300000214
     },
     {
       "label": "Native 3B (0/28)",
@@ -30,7 +30,7 @@
       "transplanted_count": 0,
       "loss": 2.447265625,
       "perplexity": 11.556703116117722,
-      "prefill_ms": 188.38795800002117
+      "prefill_ms": 187.636332999773
     }
   ]
 }
