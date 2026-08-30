@@ -1,8 +1,14 @@
 # Cross-Model KV Cache Transplant
 
-**Accelerating LLM prefill by 2.29× without fine-tuning.**
+[![Interactive Report](https://img.shields.io/badge/Interactive_Research_Report-Live_on_GitHub_Pages-0284c7?style=for-the-badge&logo=github)](https://ombansod2.github.io/kv-cache-transplant/)
+
+**Accelerating LLM prefill by 2.22× without fine-tuning.**
+
+**Author:** [Om Bansod](https://github.com/OmBansod2)
 
 A research implementation of **Cross-Model Key-Value (KV) Cache Transplantation** between [Llama-3.2-1B](https://huggingface.co/unsloth/Llama-3.2-1B) and [Llama-3.2-3B](https://huggingface.co/unsloth/Llama-3.2-3B) on Apple Silicon MPS (M4 Pro).
+
+> 📊 **Read the Full Interactive Research Report:** [https://ombansod2.github.io/kv-cache-transplant/](https://ombansod2.github.io/kv-cache-transplant/)
 
 The core idea: let the small fast model (1B) process the prompt, then project its attention KV state into the larger model's (3B) memory space via a single 31 ms fused GPU matrix multiplication — so the 3B model starts generating tokens without re-reading the prompt.
 
