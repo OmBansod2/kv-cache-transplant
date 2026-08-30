@@ -96,7 +96,7 @@ kv-cache-transplant/
 ### Installation
 
 ```bash
-git clone https://github.com/yourname/kv-cache-transplant.git
+git clone https://github.com/OmBansod2/kv-cache-transplant.git
 cd kv-cache-transplant
 python3 -m venv venv
 source venv/bin/activate
