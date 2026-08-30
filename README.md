@@ -170,7 +170,7 @@ Swaps models between GPU and CPU on Apple Silicon Unified Memory, enabling singl
 If you find this useful for your research, please cite:
 
 ```bibtex
-@misc{kv_cache_transplant_2024,
+@misc{kv_cache_transplant_2026,
   title  = {Cross-Model KV Cache Transplantation: Accelerating LLM Prefill Without Fine-Tuning},
   author = {Om Bansod},
   year   = {2026},
