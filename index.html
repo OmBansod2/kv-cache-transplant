@@ -674,6 +674,10 @@
         }
         tr:last-child td { border-bottom: none; }
         tr:hover td { background: #f8fafc; }
+        tr.row-selected td {
+            background: rgba(2, 132, 199, 0.08) !important;
+            border-bottom-color: rgba(2, 132, 199, 0.25) !important;
+        }
 
         .math-block {
             background: #f8fafc;
@@ -851,7 +855,7 @@
         </section>
 
         <!-- Section 01: Interactive Dual-LLM KV Transplant Architecture Workbench -->
-        <section class="section animated-section">
+        <section class="section animated-section" id="workbench-section">
             <h2 class="section-title"><span class="number">01</span> Interactive Dual-LLM Architecture Workbench</h2>
             <div class="workbench-card">
                 <div class="workbench-toolbar">
@@ -1355,7 +1359,7 @@
                         </thead>
                         <tbody>
                             
-        <tr id="row-layer-0" onclick="selectLayer3B(0)" style="cursor: pointer;">
+        <tr id="row-layer-0" onclick="selectLayer3B(0, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 00</td>
             <td class="font-mono text-purple">[L00, L01, L02]</td>
             <td><span class='badge badge-high'>0.9990</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9999)</span></td>
@@ -1364,7 +1368,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-1" onclick="selectLayer3B(1)" style="cursor: pointer;">
+        <tr id="row-layer-1" onclick="selectLayer3B(1, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 01</td>
             <td class="font-mono text-purple">[L00, L01, L02]</td>
             <td><span class='badge badge-high'>0.9980</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9998)</span></td>
@@ -1373,7 +1377,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-2" onclick="selectLayer3B(2)" style="cursor: pointer;">
+        <tr id="row-layer-2" onclick="selectLayer3B(2, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 02</td>
             <td class="font-mono text-purple">[L00, L01, L02]</td>
             <td><span class='badge badge-high'>0.9891</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9981)</span></td>
@@ -1382,7 +1386,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-3" onclick="selectLayer3B(3)" style="cursor: pointer;">
+        <tr id="row-layer-3" onclick="selectLayer3B(3, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 03</td>
             <td class="font-mono text-purple">[L01, L02, L03]</td>
             <td><span class='badge badge-high'>0.9965</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9995)</span></td>
@@ -1391,7 +1395,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-4" onclick="selectLayer3B(4)" style="cursor: pointer;">
+        <tr id="row-layer-4" onclick="selectLayer3B(4, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 04</td>
             <td class="font-mono text-purple">[L01, L02, L03]</td>
             <td><span class='badge badge-high'>0.9964</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9995)</span></td>
@@ -1400,7 +1404,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-5" onclick="selectLayer3B(5)" style="cursor: pointer;">
+        <tr id="row-layer-5" onclick="selectLayer3B(5, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 05</td>
             <td class="font-mono text-purple">[L02, L03, L04]</td>
             <td><span class='badge badge-high'>0.9956</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9992)</span></td>
@@ -1409,7 +1413,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-6" onclick="selectLayer3B(6)" style="cursor: pointer;">
+        <tr id="row-layer-6" onclick="selectLayer3B(6, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 06</td>
             <td class="font-mono text-purple">[L02, L03, L04]</td>
             <td><span class='badge badge-high'>0.9965</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9995)</span></td>
@@ -1418,7 +1422,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-7" onclick="selectLayer3B(7)" style="cursor: pointer;">
+        <tr id="row-layer-7" onclick="selectLayer3B(7, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 07</td>
             <td class="font-mono text-purple">[L03, L04, L05]</td>
             <td><span class='badge badge-high'>0.9959</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9993)</span></td>
@@ -1427,7 +1431,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-8" onclick="selectLayer3B(8)" style="cursor: pointer;">
+        <tr id="row-layer-8" onclick="selectLayer3B(8, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 08</td>
             <td class="font-mono text-purple">[L03, L04, L05]</td>
             <td><span class='badge badge-high'>0.9954</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9991)</span></td>
@@ -1436,7 +1440,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-9" onclick="selectLayer3B(9)" style="cursor: pointer;">
+        <tr id="row-layer-9" onclick="selectLayer3B(9, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 09</td>
             <td class="font-mono text-purple">[L04, L05, L06]</td>
             <td><span class='badge badge-high'>0.9939</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9988)</span></td>
@@ -1445,7 +1449,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-10" onclick="selectLayer3B(10)" style="cursor: pointer;">
+        <tr id="row-layer-10" onclick="selectLayer3B(10, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 10</td>
             <td class="font-mono text-purple">[L05, L06, L07]</td>
             <td><span class='badge badge-high'>0.9931</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9985)</span></td>
@@ -1454,7 +1458,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-11" onclick="selectLayer3B(11)" style="cursor: pointer;">
+        <tr id="row-layer-11" onclick="selectLayer3B(11, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 11</td>
             <td class="font-mono text-purple">[L05, L06, L07]</td>
             <td><span class='badge badge-high'>0.9937</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9992)</span></td>
@@ -1463,7 +1467,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-12" onclick="selectLayer3B(12)" style="cursor: pointer;">
+        <tr id="row-layer-12" onclick="selectLayer3B(12, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 12</td>
             <td class="font-mono text-purple">[L06, L07, L08]</td>
             <td><span class='badge badge-high'>0.9936</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9986)</span></td>
@@ -1472,7 +1476,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-13" onclick="selectLayer3B(13)" style="cursor: pointer;">
+        <tr id="row-layer-13" onclick="selectLayer3B(13, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 13</td>
             <td class="font-mono text-purple">[L06, L07, L08]</td>
             <td><span class='badge badge-high'>0.9945</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9989)</span></td>
@@ -1481,7 +1485,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-14" onclick="selectLayer3B(14)" style="cursor: pointer;">
+        <tr id="row-layer-14" onclick="selectLayer3B(14, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 14</td>
             <td class="font-mono text-purple">[L07, L08, L09]</td>
             <td><span class='badge badge-high'>0.9933</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9989)</span></td>
@@ -1490,7 +1494,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-15" onclick="selectLayer3B(15)" style="cursor: pointer;">
+        <tr id="row-layer-15" onclick="selectLayer3B(15, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 15</td>
             <td class="font-mono text-purple">[L07, L08, L09]</td>
             <td><span class='badge badge-high'>0.9941</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9989)</span></td>
@@ -1499,7 +1503,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-16" onclick="selectLayer3B(16)" style="cursor: pointer;">
+        <tr id="row-layer-16" onclick="selectLayer3B(16, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 16</td>
             <td class="font-mono text-purple">[L08, L09, L10]</td>
             <td><span class='badge badge-high'>0.9945</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9990)</span></td>
@@ -1508,7 +1512,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-17" onclick="selectLayer3B(17)" style="cursor: pointer;">
+        <tr id="row-layer-17" onclick="selectLayer3B(17, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 17</td>
             <td class="font-mono text-purple">[L08, L09, L10]</td>
             <td><span class='badge badge-high'>0.9947</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9991)</span></td>
@@ -1517,7 +1521,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-18" onclick="selectLayer3B(18)" style="cursor: pointer;">
+        <tr id="row-layer-18" onclick="selectLayer3B(18, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 18</td>
             <td class="font-mono text-purple">[L09, L10, L11]</td>
             <td><span class='badge badge-high'>0.9953</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9991)</span></td>
@@ -1526,7 +1530,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-19" onclick="selectLayer3B(19)" style="cursor: pointer;">
+        <tr id="row-layer-19" onclick="selectLayer3B(19, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 19</td>
             <td class="font-mono text-purple">[L10, L11, L12]</td>
             <td><span class='badge badge-high'>0.9951</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9992)</span></td>
@@ -1535,7 +1539,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-20" onclick="selectLayer3B(20)" style="cursor: pointer;">
+        <tr id="row-layer-20" onclick="selectLayer3B(20, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 20</td>
             <td class="font-mono text-purple">[L10, L11, L12]</td>
             <td><span class='badge badge-high'>0.9949</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9992)</span></td>
@@ -1544,7 +1548,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-21" onclick="selectLayer3B(21)" style="cursor: pointer;">
+        <tr id="row-layer-21" onclick="selectLayer3B(21, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 21</td>
             <td class="font-mono text-purple">[L11, L12, L13]</td>
             <td><span class='badge badge-high'>0.9949</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9992)</span></td>
@@ -1553,7 +1557,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-22" onclick="selectLayer3B(22)" style="cursor: pointer;">
+        <tr id="row-layer-22" onclick="selectLayer3B(22, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 22</td>
             <td class="font-mono text-purple">[L11, L12, L13]</td>
             <td><span class='badge badge-high'>0.9946</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9993)</span></td>
@@ -1562,7 +1566,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-23" onclick="selectLayer3B(23)" style="cursor: pointer;">
+        <tr id="row-layer-23" onclick="selectLayer3B(23, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 23</td>
             <td class="font-mono text-purple">[L12, L13, L14]</td>
             <td><span class='badge badge-high'>0.9925</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9987)</span></td>
@@ -1571,7 +1575,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-24" onclick="selectLayer3B(24)" style="cursor: pointer;">
+        <tr id="row-layer-24" onclick="selectLayer3B(24, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 24</td>
             <td class="font-mono text-purple">[L12, L13, L14]</td>
             <td><span class='badge badge-high'>0.9924</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9987)</span></td>
@@ -1580,7 +1584,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-25" onclick="selectLayer3B(25)" style="cursor: pointer;">
+        <tr id="row-layer-25" onclick="selectLayer3B(25, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 25</td>
             <td class="font-mono text-purple">[L13, L14, L15]</td>
             <td><span class='badge badge-high'>0.9895</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9986)</span></td>
@@ -1589,7 +1593,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-26" onclick="selectLayer3B(26)" style="cursor: pointer;">
+        <tr id="row-layer-26" onclick="selectLayer3B(26, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 26</td>
             <td class="font-mono text-purple">[L13, L14, L15]</td>
             <td><span class='badge badge-high'>0.9920</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9985)</span></td>
@@ -1598,7 +1602,7 @@
             <td class="text-emerald font-mono font-bold">&radic; Fused GEMM (31.2 ms)</td>
         </tr>
         
-        <tr id="row-layer-27" onclick="selectLayer3B(27)" style="cursor: pointer;">
+        <tr id="row-layer-27" onclick="selectLayer3B(27, true)" style="cursor: pointer;">
             <td class="font-mono font-bold text-blue">Layer 27</td>
             <td class="font-mono text-purple">[L13, L14, L15]</td>
             <td><span class='badge badge-high'>0.9919</span> <span style="font-size:0.75rem; color: #64748b;">(Cos: 0.9990)</span></td>
@@ -1841,17 +1845,24 @@
         selectLayer3B(currentSelected3B);
     }
 
-    function selectLayer3B(layerIdx) {
+    function selectLayer3B(layerIdx, scrollUp = false) {
         currentSelected3B = layerIdx;
 
-        // Reset previous selections
+        // Reset previous selections in slots and table rows
         document.querySelectorAll('.layer-interactive-slot').forEach(el => {
             el.classList.remove('source-active', 'target-selected');
         });
+        document.querySelectorAll('.table-responsive tbody tr').forEach(tr => {
+            tr.classList.remove('row-selected');
+        });
 
-        // Highlight 3B Slot
+        // Highlight 3B Slot in Workbench
         const targetSlot = document.getElementById(`slot-3b-${layerIdx}`);
         if (targetSlot) targetSlot.classList.add('target-selected');
+
+        // Highlight Table Row
+        const tableRow = document.getElementById(`row-layer-${layerIdx}`);
+        if (tableRow) tableRow.classList.add('row-selected');
 
         // Find data
         const item = layersData.find(d => d.layer_3b === layerIdx);
@@ -1873,7 +1884,13 @@
         document.getElementById('tel-r2-k').innerText = isNativeMode ? '100.0% (Native Full Rank)' : `${(item.r2_k * 100).toFixed(2)}% (Cos: ${item.cos_k.toFixed(4)})`;
         document.getElementById('tel-r2-v').innerText = isNativeMode ? '100.0% (Native Full Rank)' : `${(item.r2_v * 100).toFixed(2)}% (Cos: ${item.cos_v.toFixed(4)})`;
 
-        drawTracerLines();
+        // Smooth scroll to workbench if clicked from table
+        if (scrollUp) {
+            const wb = document.getElementById('workbench-section');
+            if (wb) {
+                wb.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
     }
 
     function drawTracerLines() {
