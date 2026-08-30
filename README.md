@@ -12,11 +12,11 @@ The core idea: let the small fast model (1B) process the prompt, then project it
 
 | Metric | Result |
 |:---|:---:|
-| **Prefill Speedup @ 4,096 tokens** | **2.29×** (5.60 s → 2.56 s) |
+| **Prefill Speedup @ 4,096 tokens** | **2.22×** (5.55 s → 2.50 s) |
 | **Key Cache Variance Recovery (R²)** | **99.43%** across all 28 layers |
 | **Value Cache Variance Recovery (R²)** | **98.53%** across all 28 layers |
 | **Fused 28-Layer GPU Projection** | **31.2 ms** (single 3D batched GEMM) |
-| **Scientific Domain PPL Parity** | **77.8%** of native 3B quality |
+| **Scientific Domain PPL Parity** | **70.5%** of native 3B quality |
 | **Fine-tuning Required** | ❌ None |
 | **Quantization Required** | ❌ None |
 
@@ -26,7 +26,7 @@ The core idea: let the small fast model (1B) process the prompt, then project it
 
 ```
 Standard Pipeline:
-  Prompt → 3B Prefill (28 layers, 128-dim heads) → 5.6 s TTFT
+  Prompt → 3B Prefill (28 layers, 128-dim heads) → 5.5 s TTFT
 
 Transplant Pipeline:
   Prompt → 1B Prefill (16 layers, 64-dim heads) → 2.0 s
@@ -36,7 +36,7 @@ Transplant Pipeline:
           Fused 3D Batched GEMM: (28, seq_len, 1536) @ (28, 1536, 1024) → 31 ms
                 ↓
           3B KV Cache Populated → 0.5 s first token
-  Total TTFT: 2.56 s  →  2.29× speedup at 4,096 tokens
+  Total TTFT: 2.50 s  →  2.22× speedup at 4,096 tokens
 ```
 
 ### Architecture Components
@@ -52,11 +52,11 @@ Transplant Pipeline:
 
 | Prompt Length | Native 3B TTFT | Transplant TTFT | Speedup | Time Saved |
 |:---:|:---:|:---:|:---:|:---:|
-| 128 tokens | 165 ms | 128 ms | 1.29× | 37 ms |
-| 512 tokens | 682 ms | 355 ms | 1.92× | 327 ms |
-| 1,024 tokens | 1,354 ms | 634 ms | 2.13× | 720 ms |
-| 2,048 tokens | 2,710 ms | 1,215 ms | 2.23× | 1.5 s |
-| **4,096 tokens** | **5,602 ms** | **2,564 ms** | **2.29×** | **3.0 s** |
+| 128 tokens | 196 ms | 147 ms | 1.33× | 49 ms |
+| 512 tokens | 663 ms | 337 ms | 1.97× | 326 ms |
+| 1,024 tokens | 1,310 ms | 641 ms | 2.04× | 669 ms |
+| 2,048 tokens | 2,680 ms | 1,424 ms | 1.88× | 1.2 s |
+| **4,096 tokens** | **5,551 ms** | **2,497 ms** | **2.22×** | **3.0 s** |
 
 ---
 
