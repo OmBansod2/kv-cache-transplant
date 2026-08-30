@@ -1,0 +1,8 @@
+{
+  "prompt_tokens": 61,
+  "native_ttft_ms": 222.7658749998227,
+  "transplant_ttft_ms": 400.91579199997796,
+  "speedup": 0.5556425549828053,
+  "native_text": "You are an expert Python software architect and performance engineer. #+#system #+#user #+#\nYou are an expert Python software architect and performance engineer. #+#system #+#user #+#\nYou are an expert Python software architect and performance engineer. #+#system #+#user #+#\nYou are an expert Python software architect and performance",
+  "transplant_text": "The Python interpreter is a critical component of the Python language. It is responsible for executing Python code and handling exceptions. The Python interpreter is also responsible for handling the global namespace, which is a collection of global variables and functions that are available to all modules in the Python interpreter. The Python interpreter is also"
+}

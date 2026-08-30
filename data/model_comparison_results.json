@@ -1,0 +1,50 @@
+{
+  "prefill_benchmarks": [
+    {
+      "seq_len": 256,
+      "1b_ttft_ms": 140.47316666680368,
+      "3b_ttft_ms": 347.7483613332879,
+      "transplant_ttft_ms": 208.15523600019029,
+      "speedup_vs_3b": 1.6706202928903024,
+      "time_saved_ms": 139.59312533309762
+    },
+    {
+      "seq_len": 1024,
+      "1b_ttft_ms": 509.33347233331006,
+      "3b_ttft_ms": 1310.5385833332548,
+      "transplant_ttft_ms": 613.0830833332462,
+      "speedup_vs_3b": 2.137619873978648,
+      "time_saved_ms": 697.4555000000086
+    },
+    {
+      "seq_len": 2048,
+      "1b_ttft_ms": 1032.2282776666423,
+      "3b_ttft_ms": 2667.858944333299,
+      "transplant_ttft_ms": 1211.0918889999691,
+      "speedup_vs_3b": 2.2028542743657717,
+      "time_saved_ms": 1456.7670553333298
+    }
+  ],
+  "generation": {
+    "1b_tps": 64.23009219581422,
+    "3b_tps": 28.826882216129412,
+    "our_system_tps": 21.29677103682225,
+    "speculative_acceptance": 55.769230769230774
+  },
+  "perplexity": {
+    "1b_ppl": 11.784638661080912,
+    "3b_ppl": 10.941666595318791,
+    "our_system_ppl": 16.88
+  },
+  "memory": {
+    "1b_gb": 2.301884174346924,
+    "3b_gb": 5.984213352203369,
+    "both_gb": 8.286097526550293
+  },
+  "texts": {
+    "prompt": "Explain the difference between optimistic concurrency control and two-phase locking in databases:",
+    "text_1b": " optimistic concurrency control is a form of concurrency control that allows a transaction to commit even if it detects that another transaction has modified the data it is about to update. Two-phase locking is a form of concurrency control that allows a transaction to commit only if it has acquired exclusive access to the data it is about",
+    "text_3b": " What are the advantages and disadvantages of each approach?\nOptimistic concurrency control (OCC) is a method of concurrency control that assumes that the data is consistent and that the transactions are correct. It is a form of locking that is used in databases to ensure that multiple transactions do not access the same",
+    "text_our_system": " Explain the difference between optimistic concurrency control and two-phase locking in databases. What are the advantages and disadvantages of each approach? What are the advantages and disadvantages of each approach? What are the advantages and disadvantages of each approach? What are the advantages and disadvantages of each approach? What are the advantages and disadvantages"
+  }
+}

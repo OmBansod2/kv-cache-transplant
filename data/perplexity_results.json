@@ -1,0 +1,63 @@
+{
+  "summary": {
+    "avg_native_3b_ppl": 9.539237436502628,
+    "avg_transplant_3b_ppl": 16.875489606442052,
+    "avg_native_1b_ppl": 13.030569614020013,
+    "avg_delta_ppl": 7.336252169939424,
+    "avg_parity_percentage": 51.52436287632841
+  },
+  "domain_results": [
+    {
+      "domain": "Systems Architecture",
+      "prefix_tokens": 63,
+      "target_tokens": 35,
+      "native_3b_loss": 2.447265625,
+      "native_3b_ppl": 11.556703116117722,
+      "transplant_3b_loss": 2.990234375,
+      "transplant_3b_ppl": 19.89034374461794,
+      "native_1b_loss": 2.931640625,
+      "native_1b_ppl": 18.758380733362646,
+      "delta_ppl": 8.333640628500218,
+      "parity_percentage": 58.10207839794026
+    },
+    {
+      "domain": "Python Code & Algorithms",
+      "prefix_tokens": 71,
+      "target_tokens": 96,
+      "native_3b_loss": 0.419189453125,
+      "native_3b_ppl": 1.520728434254703,
+      "transplant_3b_loss": 1.79296875,
+      "transplant_3b_ppl": 6.007260073480564,
+      "native_1b_loss": 0.55322265625,
+      "native_1b_ppl": 1.7388477065755477,
+      "delta_ppl": 4.486531639225861,
+      "parity_percentage": 25.314842634632324
+    },
+    {
+      "domain": "Scientific & Mathematics",
+      "prefix_tokens": 54,
+      "target_tokens": 40,
+      "native_3b_loss": 2.5625,
+      "native_3b_ppl": 12.968197316969134,
+      "transplant_3b_loss": 2.912109375,
+      "transplant_3b_ppl": 18.39556080667227,
+      "native_1b_loss": 2.6953125,
+      "native_1b_ppl": 14.81014620089916,
+      "delta_ppl": 5.427363489703135,
+      "parity_percentage": 70.49634122741955
+    },
+    {
+      "domain": "General Reasoning & Logic",
+      "prefix_tokens": 37,
+      "target_tokens": 29,
+      "native_3b_loss": 2.494140625,
+      "native_3b_ppl": 12.111320878668954,
+      "transplant_3b_loss": 3.14453125,
+      "transplant_3b_ppl": 23.20879380099744,
+      "native_1b_loss": 2.822265625,
+      "native_1b_ppl": 16.8149038152427,
+      "delta_ppl": 11.097472922328487,
+      "parity_percentage": 52.18418924532152
+    }
+  ]
+}

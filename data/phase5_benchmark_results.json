@@ -1,0 +1,29 @@
+{
+  "quality_gate": {
+    "normal_ppl": 17.416566918622852,
+    "normal_passed": true,
+    "normal_gate_ms": 287.6837499998146,
+    "garbage_ppl": 739.1262534528506,
+    "garbage_passed": false,
+    "garbage_gate_ms": 85.82316700085357
+  },
+  "incremental_transplant": {
+    "turns": 3,
+    "final_total_tokens": 37
+  },
+  "temperature_speculative": {
+    "acceptance_rate": 47.5,
+    "tokens_per_step": 3.0,
+    "temperature": 0.7,
+    "acceptance_threshold": 0.05,
+    "gamma": 4
+  },
+  "model_offloading": {
+    "swap_to_1b_ms": 1104.345125000691,
+    "swap_to_3b_ms": 2945.5581669999447,
+    "swap_to_both_ms": 307.3699579999811,
+    "mem_1b_only_gb": 4.37,
+    "mem_3b_only_gb": 8.05,
+    "mem_both_gb": 10.35
+  }
+}

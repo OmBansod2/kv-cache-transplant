@@ -1,0 +1,64 @@
+{
+  "scaling_results": [
+    {
+      "seq_len": 128,
+      "native_prefill_ms": 193.9707910000834,
+      "native_ttft_ms": 195.4694160001509,
+      "transplant_1b_prefill_ms": 80.50112499995521,
+      "transplant_unwind_ms": 10.206333000041923,
+      "transplant_fused_proj_ms": 15.056749999985186,
+      "transplant_prefill_total_ms": 105.76420799998232,
+      "transplant_ttft_ms": 147.5289170000451,
+      "ttft_speedup": 1.3249566252837817,
+      "prefill_speedup": 1.8339927530125866
+    },
+    {
+      "seq_len": 512,
+      "native_prefill_ms": 664.7254169999997,
+      "native_ttft_ms": 666.1842499997874,
+      "transplant_1b_prefill_ms": 263.11954199991305,
+      "transplant_unwind_ms": 12.29383300005793,
+      "transplant_fused_proj_ms": 151.2755419998939,
+      "transplant_prefill_total_ms": 426.6889169998649,
+      "transplant_ttft_ms": 463.2662500000606,
+      "ttft_speedup": 1.4380159357598363,
+      "prefill_speedup": 1.5578689544453532
+    },
+    {
+      "seq_len": 1024,
+      "native_prefill_ms": 1338.5980000000473,
+      "native_ttft_ms": 1340.0773329999538,
+      "transplant_1b_prefill_ms": 527.9674170001272,
+      "transplant_unwind_ms": 8.252041999867288,
+      "transplant_fused_proj_ms": 61.53304100007517,
+      "transplant_prefill_total_ms": 597.7525000000696,
+      "transplant_ttft_ms": 663.0307499999617,
+      "ttft_speedup": 2.0211390391773403,
+      "prefill_speedup": 2.2393850297571176
+    },
+    {
+      "seq_len": 2048,
+      "native_prefill_ms": 2730.426583000053,
+      "native_ttft_ms": 2731.9626670000616,
+      "transplant_1b_prefill_ms": 1131.8320840000524,
+      "transplant_unwind_ms": 8.217082999863123,
+      "transplant_fused_proj_ms": 117.69437500015556,
+      "transplant_prefill_total_ms": 1257.743542000071,
+      "transplant_ttft_ms": 1433.5075839999263,
+      "ttft_speedup": 1.9057887781640102,
+      "prefill_speedup": 2.1708929458370445
+    },
+    {
+      "seq_len": 4096,
+      "native_prefill_ms": 5598.434250000082,
+      "native_ttft_ms": 5599.93333400007,
+      "transplant_1b_prefill_ms": 2186.2954999999147,
+      "transplant_unwind_ms": 13.102750000143715,
+      "transplant_fused_proj_ms": 241.69512499997836,
+      "transplant_prefill_total_ms": 2441.0933750000368,
+      "transplant_ttft_ms": 2558.118666999917,
+      "ttft_speedup": 2.1890827060683233,
+      "prefill_speedup": 2.2934125778781396
+    }
+  ]
+}

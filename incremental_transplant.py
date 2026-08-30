@@ -74,13 +74,18 @@ class IncrementalTransplantCache:
             new_keys = [l[0][:, :, -new_len:, :] for l in self.past_kv_1b]
             new_vals = [l[1][:, :, -new_len:, :] for l in self.past_kv_1b]
 
-        # Step 3: Unwind RoPE from new keys
-        unwound_new_keys = [inverse_rope(k, head_dim=self.head_dim_1b, base=500000.0) for k in new_keys]
+        # Step 3: Unwind RoPE from new keys using true token positions
+        pos_ids = torch.arange(self.total_tokens, self.total_tokens + new_len, device=self.device)
+        unwound_new_keys = [
+            inverse_rope(k, position_ids=pos_ids, head_dim=self.head_dim_1b, base=500000.0)
+            for k in new_keys
+        ]
 
-        # Step 4: Project new KV entries through fused projector
-        # Note: We pass the full sequence length for correct RoPE re-application
+        # Step 4: Project new KV entries through fused projector with position offset
         new_total = self.total_tokens + new_len
-        projected_new = self.projector.project_and_build_cache(unwound_new_keys, new_vals, new_len)
+        projected_new = self.projector.project_and_build_cache(
+            unwound_new_keys, new_vals, new_len, position_offset=self.total_tokens
+        )
 
         # Step 5: Append to existing 3B cache
         if self.past_kv_3b is None:

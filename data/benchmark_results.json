@@ -1,0 +1,30 @@
+{
+  "version": "v2_neural_residual_mlp",
+  "prompt_tokens": 469,
+  "generated_tokens": 50,
+  "native_3b": {
+    "prefill_ms": 671.030332999976,
+    "ttft_ms": 674.6989580000218,
+    "decode_total_ms": 1840.256208000028,
+    "total_ms": 2515.695208000011,
+    "ms_per_token": 37.556249142857716,
+    "output_text": "sup>1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1.1."
+  },
+  "transplant": {
+    "1b_prefill_ms": 394.4677499999898,
+    "unwind_rope_ms": 17.693958999984716,
+    "kv_projection_ms": 210.82404200001292,
+    "total_prefill_pipeline_ms": 622.995584000023,
+    "ttft_ms": 665.3600419999748,
+    "decode_total_ms": 1876.5598329999875,
+    "total_ms": 2543.059167000024,
+    "ms_per_token": 38.29713944897934,
+    "output_text": "php: The Huggingface API is a library for the Huggingface API is a library that provides a library that is a library that is a library that is a library that is a library that is a library that is a library that"
+  },
+  "comparison": {
+    "ttft_speedup": 1.0140358834473673,
+    "prefill_speedup": 1.0771028723695597,
+    "jaccard_similarity": 0.1,
+    "exact_match_rate": 0.04
+  }
+}

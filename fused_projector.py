@@ -80,10 +80,11 @@ class FusedKVProjector(nn.Module):
         unwound_1b_keys: List[torch.Tensor],  # 16 tensors of (1, 8, seq_len, 64)
         raw_1b_vals: List[torch.Tensor],      # 16 tensors of (1, 8, seq_len, 64)
         seq_len: int,
+        position_offset: int = 0,
     ) -> DynamicCache:
         """
         Gathers all 28 layer inputs, executes a single fused 3D batched GEMM on GPU,
-        re-applies 3B RoPE, and populates a 3B DynamicCache.
+        re-applies 3B RoPE with position offsets, and populates a 3B DynamicCache.
         """
         # Step 1: Pre-flatten 1B tensors once: (16, seq_len, 512)
         flat_1b_keys = torch.stack([
@@ -112,12 +113,13 @@ class FusedKVProjector(nn.Module):
         out_keys_3b = torch.bmm(in_k_batch, self.W_keys) + self.b_keys
         out_vals_3b = torch.bmm(in_v_batch, self.W_vals) + self.b_vals
 
-        # Step 4: Reshape, apply RoPE per layer, and populate DynamicCache
+        # Step 4: Reshape, apply RoPE per layer with position offsets, and populate DynamicCache
+        pos_ids = torch.arange(position_offset, position_offset + seq_len, device=self.device)
         cache_3b = DynamicCache()
         for j in range(self.num_layers_3b):
             k_j = out_keys_3b[j].view(1, seq_len, self.num_kv_heads, self.head_dim_3b).permute(0, 2, 1, 3)
             v_j = out_vals_3b[j].view(1, seq_len, self.num_kv_heads, self.head_dim_3b).permute(0, 2, 1, 3)
-            k_rot = apply_rope(k_j, head_dim=self.head_dim_3b, base=500000.0)
+            k_rot = apply_rope(k_j, position_ids=pos_ids, head_dim=self.head_dim_3b, base=500000.0)
             cache_3b.update(k_rot, v_j, layer_idx=j)
 
         return cache_3b

@@ -1,0 +1,33 @@
+{
+  "prompt_tokens": 469,
+  "gamma": 3,
+  "native_3b": {
+    "prefill_ms": 751.5257079999174,
+    "ttft_ms": 753.1707499997538,
+    "decode_ms": 1847.105124999871,
+    "total_ms": 2600.5092079999486,
+    "tokens_per_sec": 27.069385127716266
+  },
+  "transplant_speculative": {
+    "prompt_tokens": 469,
+    "generated_tokens_count": 50,
+    "prefill_ms": 515.3680419998636,
+    "ttft_ms": 551.6204169998673,
+    "decode_total_ms": 3160.748374999912,
+    "total_time_ms": 3712.368791999779,
+    "ms_per_token": 63.21496749999824,
+    "tokens_per_sec": 15.819038426303516,
+    "gamma": 3,
+    "step_count": 26,
+    "accepted_draft_tokens": 23,
+    "total_draft_tokens": 77,
+    "acceptance_rate": 29.87012987012987,
+    "tokens_per_step": 1.9230769230769231,
+    "generated_text": "supp\n1. Analyze the data structure and query processing in the Huggingface library. The Huggingface library is a Python library that provides a high-level interface to the underlying query processing and query processing. The library is designed"
+  },
+  "comparison": {
+    "ttft_speedup": 1.3653786676281328,
+    "decode_throughput_speedup": 0.5843885389959024,
+    "total_speedup": 0.7004986179185894
+  }
+}
