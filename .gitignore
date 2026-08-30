@@ -30,6 +30,7 @@ models/
 # HTML reports and figures — in the /reports directory instead
 reports/
 report.html
+generate_html_report.py
 
 # macOS
 .DS_Store
