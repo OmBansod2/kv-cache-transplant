@@ -281,6 +281,12 @@ def generate_report():
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+        onload="renderMathInElement(document.body, {{delimiters: [{{left: '$$', right: '$$', display: true}}, {{left: '$', right: '$', display: false}}]}});"></script>
 
     <style>
         :root {{
@@ -311,6 +317,45 @@ def generate_report():
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
             padding-bottom: 80px;
+            scroll-behavior: smooth;
+        }}
+
+        /* Animations */
+        @keyframes fadeInUp {{
+            from {{ opacity: 0; transform: translateY(20px); }}
+            to {{ opacity: 1; transform: translateY(0); }}
+        }}
+        @keyframes pulseGlow {{
+            0% {{ box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }}
+            70% {{ box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }}
+            100% {{ box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }}
+        }}
+        @keyframes flowRight {{
+            0% {{ background-position: -200% 0; }}
+            100% {{ background-position: 200% 0; }}
+        }}
+        
+        .animated-section {{ animation: fadeInUp 0.8s ease-out forwards; opacity: 0; }}
+        .delay-1 {{ animation-delay: 0.1s; }}
+        .delay-2 {{ animation-delay: 0.2s; }}
+        .delay-3 {{ animation-delay: 0.3s; }}
+        .delay-4 {{ animation-delay: 0.4s; }}
+
+        .pipeline-diagram {{
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--bg-secondary); padding: 30px; border-radius: 16px; border: 1px solid var(--border-color);
+            margin-bottom: 40px; position: relative; overflow: hidden;
+        }}
+        .pipeline-step {{
+            background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color);
+            text-align: center; z-index: 2; width: 22%; position: relative; transition: transform 0.3s ease, border-color 0.3s ease;
+        }}
+        .pipeline-step:hover {{ transform: translateY(-5px); border-color: var(--accent-blue); }}
+        .pipeline-step h4 {{ color: #fff; margin-bottom: 8px; font-family: 'Outfit', sans-serif; font-size: 1.1rem; }}
+        .pipeline-step p {{ color: var(--text-secondary); font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; }}
+        .pipeline-arrow {{
+            flex-grow: 1; height: 4px; background: linear-gradient(90deg, rgba(56,189,248,0.2) 25%, rgba(168,85,247,0.8) 50%, rgba(56,189,248,0.2) 75%);
+            background-size: 200% 100%; animation: flowRight 2s linear infinite; margin: 0 10px; z-index: 1; border-radius: 4px;
         }}
 
         .container {{ max-width: 1320px; margin: 0 auto; padding: 0 24px; }}
@@ -374,8 +419,14 @@ def generate_report():
         .table-responsive {{ overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color); }}
         table {{ width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }}
         th {{ background: var(--bg-secondary); color: var(--text-secondary); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; padding: 14px 18px; border-bottom: 1px solid var(--border-color); }}
-        td {{ padding: 12px 18px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }}
-        tr:hover td {{ background: rgba(255, 255, 255, 0.02); }}
+        td {{ padding: 12px 18px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); transition: background-color 0.2s ease; }}
+        tr:hover td {{ background: rgba(255, 255, 255, 0.04); cursor: default; }}
+
+        .math-block {{
+            background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 8px;
+            padding: 16px; margin: 16px 0; overflow-x: auto; color: #e0e7ff;
+            font-size: 1.1rem;
+        }}
 
         .font-mono {{ font-family: 'JetBrains Mono', monospace; }}
         .font-bold {{ font-weight: 700; }}
@@ -405,8 +456,34 @@ def generate_report():
             </div>
         </header>
 
+        <!-- Animated Pipeline Architecture -->
+        <section class="section animated-section delay-1">
+            <h2 class="section-title"><span class="number">00</span> Architecture Flow</h2>
+            <div class="pipeline-diagram">
+                <div class="pipeline-step">
+                    <h4>Prompt Prefill</h4>
+                    <p>Llama-3.2-1B (16 layers, 64-dim)<br><span class="text-emerald">2.0s</span></p>
+                </div>
+                <div class="pipeline-arrow"></div>
+                <div class="pipeline-step" style="border-color: var(--accent-purple);">
+                    <h4 style="color: var(--accent-purple);">Analytical Inversion</h4>
+                    <p>Unwind 64-dim RoPE<br>$$ x = x_{{rot}} \odot \cos - \dots $$</p>
+                </div>
+                <div class="pipeline-arrow"></div>
+                <div class="pipeline-step" style="border-color: var(--accent-blue);">
+                    <h4 style="color: var(--accent-blue);">Fused 3D GEMM</h4>
+                    <p>28-Layer Batched Mapping<br><span class="text-cyan">31.2 ms</span></p>
+                </div>
+                <div class="pipeline-arrow"></div>
+                <div class="pipeline-step" style="border-color: var(--accent-emerald);">
+                    <h4 style="color: var(--accent-emerald);">Token Generation</h4>
+                    <p>Llama-3.2-3B Cache Populated<br><span class="text-emerald">0.5s First Token</span></p>
+                </div>
+            </div>
+        </section>
+
         <!-- KPI Grid -->
-        <section class="kpi-grid">
+        <section class="kpi-grid animated-section delay-2">
             <div class="kpi-card">
                 <div class="kpi-label">Key Memory Accuracy (R&sup2;)</div>
                 <div class="kpi-value text-emerald">{mean_k * 100:.2f}%</div>
@@ -419,10 +496,10 @@ def generate_report():
                 <div class="kpi-subtext">Direction alignment: {mean_cos_v * 100:.2f}% cosine</div>
             </div>
 
-            <div class="kpi-card">
+            <div class="kpi-card" style="animation: pulseGlow 2s infinite;">
                 <div class="kpi-label">Long-Context Speedup (4k tokens)</div>
-                <div class="kpi-value text-emerald">2.29x</div>
-                <div class="kpi-subtext">5.60s &rarr; 2.56s (&gt;3.0s saved per request)</div>
+                <div class="kpi-value text-emerald">2.22x</div>
+                <div class="kpi-subtext">5.55s &rarr; 2.50s (&gt;3.0s saved per request)</div>
             </div>
 
             <div class="kpi-card">
@@ -432,12 +509,36 @@ def generate_report():
             </div>
         </section>
 
-        <!-- Section 1: Scaling Curve -->
-        <section class="section">
-            <h2 class="section-title"><span class="number">01</span> Multi-Context Length Scaling (128 to 4096 Tokens)</h2>
+        <!-- Mathematical Foundations -->
+        <section class="section animated-section delay-3">
+            <h2 class="section-title"><span class="number">01</span> Mathematical Foundations</h2>
+            <div class="card">
+                <h3 style="font-size: 1.2rem; color: var(--accent-purple); margin-bottom: 12px;">1. Analytical RoPE Inversion</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 8px;">To project 1B's key states into 3B's memory space, we must precisely unwind the 1B Rotary Position Embeddings (d=64, base=500000) to recover the position-independent semantics:</p>
+                <div class="math-block">
+                    $$ x = x_{{rot}} \odot \cos(\theta) - \text{{rotate\_half}}(x_{{rot}}) \odot \sin(\theta) $$
+                </div>
+                
+                <h3 style="font-size: 1.2rem; color: var(--accent-blue); margin-top: 24px; margin-bottom: 12px;">2. Ridge Regression Mapping</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 8px;">The projection weights are computed via closed-form Ridge Regression with $L_2$ regularization ($\alpha=1.0$) to maintain rank stability:</p>
+                <div class="math-block">
+                    $$ W = (X_c^T X_c + \alpha I)^{{-1}} X_c^T Y_c $$
+                </div>
+
+                <h3 style="font-size: 1.2rem; color: var(--accent-emerald); margin-top: 24px; margin-bottom: 12px;">3. Fused 3D Batched GEMM Projector</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 8px;">All 28 target layers are projected concurrently via a single vectorizable matrix multiplication, executing in just 31.2 ms:</p>
+                <div class="math-block">
+                    $$ \mathbf{{Y}}_{{3B}} = \mathbf{{X}}_{{1B}} \circledast \mathbf{{W}} + \mathbf{{b}} $$
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Scaling Curve -->
+        <section class="section animated-section delay-4">
+            <h2 class="section-title"><span class="number">02</span> Multi-Context Length Scaling (128 to 4096 Tokens)</h2>
             <div class="card">
                 <p style="margin-bottom: 16px; color: var(--text-secondary);">
-                    As prompt length scales, the quadratic prefill cost of Llama-3.2-3B grows rapidly. By executing prefill on the 16-layer 1B model and projecting the KV cache to 3B in 31ms, the transplant pipeline scales efficiently, reaching a <strong>2.29x speedup at 4096 tokens</strong>.
+                    As prompt length scales, the quadratic prefill cost of Llama-3.2-3B grows rapidly. By executing prefill on the 16-layer 1B model and projecting the KV cache to 3B in 31ms, the transplant pipeline scales efficiently, reaching a <strong>2.22x speedup at 4096 tokens</strong>.
                 </p>
                 <div class="figure-container" style="margin-bottom: 24px;">
                     <img src="{img3_b64}" alt="Scaling Speedup Curve">
@@ -466,9 +567,9 @@ def generate_report():
             </div>
         </section>
 
-        <!-- Section 2: Hybrid Layer Selective Transplant -->
-        <section class="section">
-            <h2 class="section-title"><span class="number">02</span> Deep-Layer Hybrid Selective Transplant Pareto Frontier</h2>
+        <!-- Section 3: Hybrid Layer Selective Transplant -->
+        <section class="section animated-section">
+            <h2 class="section-title"><span class="number">03</span> Deep-Layer Hybrid Selective Transplant Pareto Frontier</h2>
             <div class="grid-2">
                 <div class="card">
                     <p style="margin-bottom: 12px; color: var(--text-secondary);">
@@ -502,9 +603,9 @@ def generate_report():
             </div>
         </section>
 
-        <!-- Section 3: Multi-Domain Perplexity -->
-        <section class="section">
-            <h2 class="section-title"><span class="number">03</span> Multi-Domain Perplexity (PPL) Quality Matrix</h2>
+        <!-- Section 4: Multi-Domain Perplexity -->
+        <section class="section animated-section">
+            <h2 class="section-title"><span class="number">04</span> Multi-Domain Perplexity (PPL) Quality Matrix</h2>
             <div class="card">
                 <p style="margin-bottom: 16px; color: var(--text-secondary);">
                     Conditioned on the transplanted KV cache, the 3B model generates coherent text and maintains language probabilities across diverse domains without fine-tuning:
@@ -528,9 +629,9 @@ def generate_report():
             </div>
         </section>
 
-        <!-- Section 4: Visualizations -->
-        <section class="section">
-            <h2 class="section-title"><span class="number">04</span> Layer Fidelity & Latency Breakdown</h2>
+        <!-- Section 5: Visualizations -->
+        <section class="section animated-section">
+            <h2 class="section-title"><span class="number">05</span> Layer Fidelity & Latency Breakdown</h2>
             <div class="grid-2">
                 <div class="card">
                     <h3 style="font-size: 1.1rem; margin-bottom: 8px;">28-Layer Variance Explained (R&sup2;)</h3>
@@ -554,9 +655,9 @@ def generate_report():
             </div>
         </section>
 
-        <!-- Section 5: 28-Layer Fidelity Breakdown Table -->
-        <section class="section">
-            <h2 class="section-title"><span class="number">05</span> Complete 28-Layer Neural Fidelity Table</h2>
+        <!-- Section 6: 28-Layer Fidelity Breakdown Table -->
+        <section class="section animated-section">
+            <h2 class="section-title"><span class="number">06</span> Complete 28-Layer Neural Fidelity Table</h2>
             <div class="card">
                 <p style="margin-bottom: 16px; color: var(--text-secondary); font-size: 0.9rem;">
                     <strong>Architecture Note:</strong> The 31.2 ms real-time inference projector executes the closed-form Ridge projection via a single 3D batched GEMM (<code>torch.bmm</code>), while the full non-linear Residual MLP adapter is retained for offline high-fidelity mapping analysis.
@@ -581,9 +682,9 @@ def generate_report():
             </div>
         </section>
 
-        <!-- Section 6: Production Hardening -->
-        <section class="section">
-            <h2 class="section-title"><span class="number">06</span> Production Hardening & Architectural Guarantees</h2>
+        <!-- Section 7: Production Hardening -->
+        <section class="section animated-section">
+            <h2 class="section-title"><span class="number">07</span> Production Hardening & Architectural Guarantees</h2>
             {phase5_html}
         </section>
 
