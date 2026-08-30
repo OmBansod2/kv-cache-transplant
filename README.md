@@ -172,9 +172,9 @@ If you find this useful for your research, please cite:
 ```bibtex
 @misc{kv_cache_transplant_2024,
   title  = {Cross-Model KV Cache Transplantation: Accelerating LLM Prefill Without Fine-Tuning},
-  author = {},
+  author = {Bansod, Om},
   year   = {2024},
-  url    = {https://github.com/yourname/kv-cache-transplant}
+  url    = {https://github.com/OmBansod2/kv-cache-transplant}
 }
 ```
 
