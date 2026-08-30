@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyd
+*.so
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+*.whl
+
+# Data files — too large for git
+data/calibration_kv_pairs.pt
+data/calibration_kv_pairs_8b.pt
+
+# Model weights — too large for git (use Hugging Face Hub or DVC)
+weights/
+models/
+
+# HTML reports and figures — in the /reports directory instead
+reports/
+report.html
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Jupyter / IPython
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
