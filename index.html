@@ -1396,7 +1396,7 @@
                     Modern LLMs don't just store plain vectors — they rotate them using Rotary Position Embeddings (RoPE) based on where each token sits in the prompt. In 1B, the head dimension is $64$ (32 frequency bands); in 3B, it's $128$ (64 frequency bands). If you try to map rotated vectors directly, it fails ($R^2 < 40\%$) because position angles get tangled. The fix is simple: we analytically unwind the rotation back to clean Cartesian coordinates first:
                 </p>
                 <div class="math-block">
-                    $$\mathbf{R}_{\theta, p}^{-1} \mathbf{k}_{\text{rot}}(p) = \mathbf{k}_{\text{rot}}(p) \odot \cos(\mathbf{\theta}_p) - \text{rotate\_half}(\mathbf{k}_{\text{rot}}(p)) \odot \sin(\mathbf{\theta}_p)$$
+                    $$\mathbf{R}_{\theta, p}^{-1} \mathbf{k}_{\text{rot}}(p) = \mathbf{k}_{\text{rot}}(p) \odot \cos(\mathbf{\theta}_p) - \text{rotate}(\mathbf{k}_{\text{rot}}(p)) \odot \sin(\mathbf{\theta}_p)$$
                 </div>
                 <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 6px;">
                     where $\theta_{p, i} = p \cdot 500000^{-2i/64}$. Following linear projection into 3B space ($d_k=128$), the target rotary matrix $\mathbf{R}_{\theta', p}$ with $\theta'_{p, j} = p \cdot 500000^{-2j/128}$ is analytically re-applied.
@@ -1413,7 +1413,10 @@
                     To prevent collinear rank collapse during multi-layer concatenation ($3 \times 512 = 1536 \to 1024$), the optimal mapping weights are derived via Frobenius-norm regularized Ridge regression:
                 </p>
                 <div class="math-block">
-                    $$\mathbf{W}^* = \arg\min_{\mathbf{W}} \|\mathbf{X}_c \mathbf{W} - \mathbf{Y}_c\|_F^2 + \alpha \|\mathbf{W}\|_F^2 = (\mathbf{X}_c^T \mathbf{X}_c + \alpha \mathbf{I})^{-1} \mathbf{X}_c^T \mathbf{Y}_c$$
+                    $$\begin{aligned}
+                    \mathbf{W}^* &= \arg\min_{\mathbf{W}} \|\mathbf{X}_c \mathbf{W} - \mathbf{Y}_c\|_F^2 + \alpha \|\mathbf{W}\|_F^2 \\
+                    &= (\mathbf{X}_c^T \mathbf{X}_c + \alpha \mathbf{I})^{-1} \mathbf{X}_c^T \mathbf{Y}_c
+                    \end{aligned}$$
                 </div>
                 <div class="proof-step">
                     <strong>Spectral Filter Property:</strong> Decomposing $\mathbf{X}_c = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T$, the regularized solution operates as a continuous spectral shrinkage operator:
@@ -1432,7 +1435,10 @@
                     Instead of launching 28 sequential GPU kernels across layers (which incurs substantial Metal driver dispatch overhead), we stack all layer projection weights into a single contiguous 3D tensor $\mathbf{W} \in \mathbb{R}^{28 \times 1536 \times 1024}$:
                 </p>
                 <div class="math-block">
-                    $$\mathbf{Y}_{3B} = \text{torch.bmm}(\mathbf{X}_{\text{batch}}, \mathbf{W}) + \mathbf{b} \quad \text{where} \quad \mathbf{X}_{\text{batch}} \in \mathbb{R}^{28 \times N \times 1536}$$
+                    $$\begin{aligned}
+                    \mathbf{Y}_{3B} &= \text{torch.bmm}(\mathbf{X}_{\text{batch}}, \mathbf{W}) + \mathbf{b} \\
+                    &\text{where } \mathbf{X}_{\text{batch}} \in \mathbb{R}^{28 \times N \times 1536}
+                    \end{aligned}$$
                 </div>
                 <div class="proof-step">
                     <strong>Arithmetic Intensity Analysis:</strong> On Apple M4 Pro (Unified Memory Bandwidth: 273 GB/s), batched GEMM executes in $31.2\text{ ms}$ for $N=4096$, operating at near-roofline memory bandwidth utilization ($>85\%$ theoretical throughput).
