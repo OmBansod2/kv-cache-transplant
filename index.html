@@ -739,13 +739,355 @@
             border: 1px solid rgba(5, 150, 105, 0.25);
         }
 
+
+        /* Mobile-First Responsive Design System */
+        html {
+            -webkit-text-size-adjust: 100%;
+        }
+        body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .table-responsive, .table-container {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 16px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .controller-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 14px;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+        .scaling-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-top: 18px;
+        }
+        .quad-metric-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 14px;
+        }
+        .preset-btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* Comprehensive Responsive & Mobile Design */
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .slider-range {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #e2e8f0;
+            outline: none;
+            margin: 14px 0;
+            cursor: pointer;
+        }
+        .slider-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
+            border: 2px solid #ffffff;
+            transition: transform 0.1s ease;
+        }
+        .slider-range::-webkit-slider-thumb:active {
+            transform: scale(1.15);
+        }
+        .slider-range::-moz-range-thumb {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.4);
+            border: 2px solid #ffffff;
+        }
+
+        .math-block {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            max-width: 100%;
+            padding: 12px;
+            font-size: 0.95rem;
+        }
+        mjx-container {
+            max-width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            outline: none !important;
+            padding: 4px 0 !important;
+        }
+
+        .table-container {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 16px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Large Tablets / Laptops (<= 1024px) */
+        @media (max-width: 1024px) {
+            .pipeline-diagram {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .scaling-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .controller-metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .quad-metric-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Tablets & Foldables (<= 900px) */
         @media (max-width: 900px) {
             .grid-2 { grid-template-columns: 1fr; }
-            .dual-llm-grid { grid-template-columns: 1fr; }
-            .pipeline-diagram { flex-direction: column; gap: 12px; }
-            .pipeline-step { width: 100%; }
-            .pipeline-arrow { width: 100%; height: 3px; margin: 4px 0; }
+            .dual-llm-grid { 
+                grid-template-columns: 1fr; 
+                gap: 16px;
+            }
+            .comparison-grid { 
+                grid-template-columns: 1fr; 
+            }
         }
+
+        /* Tablets & Large Phones (<= 768px) */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+            header {
+                padding: 32px 0 24px;
+                margin-bottom: 28px;
+            }
+            h1 {
+                font-size: 1.75rem;
+                line-height: 1.25;
+            }
+            .subtitle {
+                font-size: 0.98rem;
+                line-height: 1.55;
+            }
+            .section-title {
+                font-size: 1.3rem;
+            }
+            .pipeline-diagram {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                padding: 16px;
+            }
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
+            }
+            .kpi-value {
+                font-size: 2rem;
+            }
+            .card {
+                padding: 18px 16px;
+            }
+            .workbench-card {
+                padding: 16px 14px;
+            }
+            .workbench-toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .preset-btn-group {
+                width: 100%;
+            }
+            .interactive-preset-btn {
+                flex: 1 1 calc(50% - 6px);
+                min-height: 38px;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .math-block {
+                font-size: 0.9rem;
+                padding: 12px 10px;
+            }
+            table {
+                min-width: 500px;
+            }
+        }
+
+        /* Mobile Phones (<= 480px) */
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 12px;
+            }
+            header {
+                padding: 24px 0 18px;
+                margin-bottom: 20px;
+            }
+            .header-badge {
+                font-size: 0.72rem;
+                padding: 4px 10px;
+                max-width: 100%;
+                white-space: normal;
+                line-height: 1.4;
+            }
+            h1 {
+                font-size: 1.38rem;
+                line-height: 1.25;
+            }
+            .subtitle {
+                font-size: 0.88rem;
+                line-height: 1.5;
+            }
+            .meta-tags {
+                gap: 6px;
+                margin-top: 14px;
+            }
+            .meta-pill {
+                font-size: 0.74rem;
+                padding: 4px 8px;
+                width: 100%;
+            }
+            .section-title {
+                font-size: 1.15rem;
+                gap: 8px;
+            }
+            .section-title span.number {
+                width: 24px;
+                height: 24px;
+                font-size: 0.78rem;
+            }
+            .pipeline-diagram {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 12px;
+            }
+            .pipeline-step {
+                padding: 14px 10px;
+            }
+            .kpi-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .kpi-value {
+                font-size: 1.7rem;
+            }
+            .controller-metrics-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .scaling-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .quad-metric-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .theory-box {
+                padding: 14px 12px;
+            }
+            .theory-header {
+                font-size: 0.95rem;
+                flex-wrap: wrap;
+            }
+            .card {
+                padding: 14px 10px;
+            }
+            .workbench-card {
+                padding: 12px 8px;
+            }
+            .layer-interactive-list {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 4px;
+            }
+            .layer-interactive-slot {
+                padding: 8px 2px;
+                font-size: 0.7rem;
+                min-height: 36px;
+            }
+            .interactive-preset-btn {
+                font-size: 0.72rem;
+                padding: 6px 8px;
+                width: 100%;
+                flex: 1 1 100%;
+            }
+            .math-block {
+                font-size: 0.82rem;
+                padding: 8px;
+            }
+            .proof-step {
+                font-size: 0.8rem;
+                padding: 10px 10px;
+            }
+            th, td {
+                padding: 7px 8px;
+                font-size: 0.72rem;
+            }
+            table {
+                min-width: 440px;
+            }
+            .bridge-chip {
+                padding: 12px 8px;
+            }
+            .bridge-chip-title {
+                font-size: 0.92rem;
+            }
+            .telemetry-panel {
+                padding: 10px;
+            }
+            .telemetry-row {
+                font-size: 0.74rem;
+            }
+        }
+
+        /* Small Phones (<= 360px) */
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 1.25rem;
+            }
+            .layer-interactive-slot {
+                font-size: 0.65rem;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -877,7 +1219,7 @@
                             <span style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">Interactive Hybrid Cutoff Controller ($L_{\text{cutoff}}$):</span>
                             <span id="cutoff-label" class="font-mono font-bold text-purple" style="font-size: 1.05rem; margin-left: 8px;">Layer 20 (Optimal Sweetspot)</span>
                         </div>
-                        <div style="display: flex; gap: 8px;">
+                        <div class="preset-btn-group">
                             <button class="interactive-preset-btn" onclick="setCutoff(16)">Cutoff L16</button>
                             <button class="interactive-preset-btn active" id="btn-cutoff-20" onclick="setCutoff(20)">Cutoff L20 (Recommended)</button>
                             <button class="interactive-preset-btn" onclick="setCutoff(24)">Cutoff L24</button>
@@ -886,7 +1228,7 @@
                     </div>
                     <input type="range" min="12" max="28" step="1" value="20" class="slider-range" id="cutoff-range-slider" oninput="setCutoff(parseInt(this.value))">
                     
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px;">
+                    <div class="controller-metrics-grid">
                         <div style="background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-color); text-align: center;">
                             <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Transplanted Layers</div>
                             <div id="metric-trans-layers" class="font-mono font-bold text-blue" style="font-size: 1.15rem; margin-top: 2px;">Layers 00 - 20 (21 Layers)</div>
@@ -1095,7 +1437,7 @@
                 <p style="color: var(--text-secondary); margin-bottom: 12px;">
                     To evaluate whether non-linear capacity is required to bridge the representational gap, we formulated and evaluated two competing projection architectures:
                 </p>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px;">
+                <div class="comparison-grid">
                     <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; padding: 14px;">
                         <div style="font-weight: 700; color: var(--accent-blue); font-size: 0.9rem; margin-bottom: 6px;">1. Closed-Form Linear Ridge Mapping</div>
                         <div class="math-block" style="font-size: 0.88rem; margin: 6px 0;">
@@ -1138,7 +1480,7 @@
                     </div>
                     <input type="range" min="128" max="4096" step="128" value="4096" class="slider-range" id="token-range-slider" oninput="updateScalingCalculator(this.value)">
                     
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 18px;">
+                    <div class="scaling-cards-grid">
                         <div style="background: #ffffff; padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); text-align: center;">
                             <div style="font-size: 0.74rem; color: var(--text-muted); text-transform: uppercase;">Native 3B Prefill</div>
                             <div id="calc-native-time" class="font-mono font-bold" style="font-size: 1.2rem; color: var(--text-primary); margin-top: 4px;">5,550 ms</div>
