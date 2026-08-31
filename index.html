@@ -725,14 +725,35 @@
             min-width: 0;
             max-width: 100%;
         }
-        mjx-container {
+        /* Block / Display Math equations */
+        mjx-container[display="true"] {
+            display: block !important;
+            text-align: center !important;
+            margin: 0.8em 0 !important;
             max-width: 100% !important;
             overflow-x: auto !important;
+            overflow-y: hidden !important;
             -webkit-overflow-scrolling: touch !important;
-            outline: none !important;
             padding: 4px 0 !important;
-            display: block !important;
-            min-width: 0 !important;
+            outline: none !important;
+        }
+
+        /* Inline Math inside text/sentences (e.g. $118.4\text{ ms}$, $R^2$) */
+        mjx-container:not([display="true"]) {
+            display: inline-block !important;
+            margin: 0 2px !important;
+            padding: 0 !important;
+            vertical-align: -0.15em !important;
+            white-space: nowrap !important;
+            outline: none !important;
+            font-size: inherit !important;
+            line-height: normal !important;
+        }
+
+        mjx-container:not([display="true"]) * {
+            white-space: nowrap !important;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
         }
 
         /* Interactive Controls */
@@ -1227,7 +1248,7 @@
                 <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 18px 20px; margin-bottom: 24px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 14px;">
                         <div>
-                            <span style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">Interactive Hybrid Cutoff Controller ($L_{\text{cutoff}}$):</span>
+                            <span style="font-weight: 700; font-size: 0.95rem; color: var(--text-primary);">Interactive Hybrid Cutoff Controller (<i>L</i><sub>cutoff</sub>):</span>
                             <span id="cutoff-label" class="font-mono font-bold text-purple" style="font-size: 1.05rem; margin-left: 8px;">Layer 20 (Optimal Sweetspot)</span>
                         </div>
                         <div class="preset-btn-group">
@@ -1376,13 +1397,13 @@
                     <span>1B and 3B Models Share Almost the Exact Same Subspace</span>
                 </div>
                 <p style="color: var(--text-secondary); margin-bottom: 12px;">
-                    Why does this work at all? Llama-3.2-1B ($16\text{ layers}, 512\text{D}$) and 3B ($28\text{ layers}, 1024\text{D}$) were trained on the exact same dataset with the same tokenizer. Even though 3B is larger and deeper, their internal attention Key and Value representations live in nearly identical linear subspaces:
+                    Why does this work at all? Llama-3.2-1B (16 layers, 512D) and 3B (28 layers, 1024D) were trained on the exact same dataset with the same tokenizer. Even though 3B is larger and deeper, their internal attention Key and Value representations live in nearly identical linear subspaces:
                 </p>
                 <div class="math-block">
                     $$\exists \mathbf{W}_l^* \in \mathbb{R}^{3d_1 \times d_2} \quad \text{such that} \quad \mathbb{E}_{\mathbf{S} \sim \mathcal{D}} \left[ \|\mathbf{X}_{\text{concat}}^{(1B)}(l) \mathbf{W}_l^* - \mathbf{Y}_l^{(3B)}\|_F^2 \right] \le \epsilon$$
                 </div>
                 <div class="proof-step">
-                    <strong>Theoretical Consequence:</strong> Because multi-head attention computes convex combinations of Value states weighted by Key-Query inner products $\text{Softmax}(\mathbf{Q}\mathbf{K}^T/\sqrt{d})\mathbf{V}$, preserving $>99\%$ of the linear variance ($R^2 \ge 0.994$) suffices to maintain downstream attention routing without requiring fine-tuning of the target model's projection matrices.
+                    <strong>Theoretical Consequence:</strong> Because multi-head attention computes convex combinations of Value states weighted by Key-Query inner products $\text{Softmax}(\mathbf{Q}\mathbf{K}^T/\sqrt{d})\mathbf{V}$, preserving &gt;99% of the linear variance (<i>R</i><sup>2</sup> &ge; 0.994) suffices to maintain downstream attention routing without requiring fine-tuning of the target model's projection matrices.
                 </div>
             </div>
 
@@ -1441,7 +1462,7 @@
                     \end{aligned}$$
                 </div>
                 <div class="proof-step">
-                    <strong>Arithmetic Intensity Analysis:</strong> On Apple M4 Pro (Unified Memory Bandwidth: 273 GB/s), batched GEMM executes in $31.2\text{ ms}$ for $N=4096$, operating at near-roofline memory bandwidth utilization ($>85\%$ theoretical throughput).
+                    <strong>Arithmetic Intensity Analysis:</strong> On Apple M4 Pro (Unified Memory Bandwidth: 273 GB/s), batched GEMM executes in <strong class="text-emerald">31.2 ms</strong> for <i>N</i> = 4096, operating at near-roofline memory bandwidth utilization (&gt;85% theoretical throughput).
                 </div>
             </div>
 
@@ -1481,7 +1502,7 @@
                     </div>
                 </div>
                 <div class="proof-step" style="border-left-color: var(--accent-emerald); background: rgba(5,150,105,0.04);">
-                    <strong>Empirical Pareto Finding:</strong> While the non-linear Residual MLP adapter yields a negligible $+0.15\%$ improvement in $R^2$ variance recovery (from $99.43\%$ to $99.58\%$), it nearly quadruples projection latency from $31.2\text{ ms}$ to $118.4\text{ ms}$. Because attention Key/Value states across co-trained models in the same architecture family lie on intrinsically linear hyperplanes, <strong>pure closed-form linear Ridge GEMM is the Pareto-optimal architectural choice</strong> for maximum TTFT acceleration ($2.22\times$).
+                    <strong>Empirical Pareto Finding:</strong> While the non-linear Residual MLP adapter yields a negligible +0.15% improvement in <i>R</i><sup>2</sup> variance recovery (from 99.43% to 99.58%), it nearly quadruples projection latency from <strong class="text-emerald font-mono">31.2 ms</strong> to <strong class="text-rose font-mono">118.4 ms</strong>. Because attention Key/Value states across co-trained models in the same architecture family lie on intrinsically linear hyperplanes, <strong>pure closed-form linear Ridge GEMM is the Pareto-optimal architectural choice</strong> for maximum TTFT acceleration (<strong class="text-emerald">2.22&times;</strong>).
                 </div>
             </div>
         </section>
@@ -2137,15 +2158,15 @@
                     </p>
                     <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; margin-bottom: 12px;">
                         <div style="font-size: 0.82rem; font-weight: 700; color: var(--accent-blue); margin-bottom: 4px;">Stage 1: Sub-Second Prefill (KV Transplant)</div>
-                        <div style="font-size: 0.8rem; color: var(--text-secondary);">1B Scout digests long prompt context (e.g. $32\text{k}+$ tokens) at $>2,000\text{ tok/s}$, and transplants memory directly into the 70B Reasoner via 3D batched GEMM in milliseconds ($5\times - 10\times$ TTFT speedup).</div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">1B Scout digests long prompt context (e.g. 32k+ tokens) at &gt;2,000 tok/s, and transplants memory directly into the 70B Reasoner via 3D batched GEMM in milliseconds (5&times; &ndash; 10&times; TTFT speedup).</div>
                     </div>
                     <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px; margin-bottom: 12px;">
                         <div style="font-size: 0.82rem; font-weight: 700; color: var(--accent-amber); margin-bottom: 4px;">Stage 2: High-Speed Draft Token Generation (Speculative)</div>
-                        <div style="font-size: 0.8rem; color: var(--text-secondary);">During decoding, the 1B Scout leverages its existing lightweight KV cache to rapidly generate $K$ speculative candidate tokens ($>100\text{ tok/s}$).</div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">During decoding, the 1B Scout leverages its existing lightweight KV cache to rapidly generate <i>K</i> speculative candidate tokens (&gt;100 tok/s).</div>
                     </div>
                     <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 10px; padding: 14px;">
                         <div style="font-size: 0.82rem; font-weight: 700; color: var(--accent-emerald); margin-bottom: 4px;">Stage 3: Parallel Verification &amp; Synchronized Memory Sync</div>
-                        <div style="font-size: 0.8rem; color: var(--text-secondary);">The 70B Reasoner evaluates all $K$ draft tokens concurrently in a single forward pass, accepting $M \le K$ tokens and dynamically updating the unified memory state.</div>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary);">The 70B Reasoner evaluates all <i>K</i> draft tokens concurrently in a single forward pass, accepting <i>M</i> &le; <i>K</i> tokens and dynamically updating the unified memory state.</div>
                     </div>
                 </div>
 
@@ -2191,7 +2212,7 @@
                         </table>
                     </div>
                     <div class="proof-step" style="border-left-color: var(--accent-blue); background: rgba(2,132,199,0.04); font-size: 0.82rem;">
-                        <strong>Research Rigor:</strong> Validating the linear KV isomorphism on the 1B $\to$ 3B pair provides an uncompromised, non-quantized FP16 mathematical foundation on a single Mac mini with 24 GB Unified Memory. Because Llama-3.3-70B shares identical GQA head ratios ($8\text{ KV heads}, d_k=128$), the exact same analytical Ridge projection formulation directly generalizes to enterprise cluster hardware.
+                        <strong>Research Rigor:</strong> Validating the linear KV isomorphism on the 1B &rarr; 3B pair provides an uncompromised, non-quantized FP16 mathematical foundation on a single Mac mini with 24 GB Unified Memory. Because Llama-3.3-70B shares identical GQA head ratios (8 KV heads, <i>d<sub>k</sub></i> = 128), the exact same analytical Ridge projection formulation directly generalizes to enterprise cluster hardware.
                     </div>
                 </div>
             </div>
