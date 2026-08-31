@@ -848,14 +848,15 @@
         }
 
         .stat-badge-pair {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 12px;
             margin-top: 12px;
             width: 100%;
         }
         .stat-badge-pair > div {
-            flex: 1 1 0;
             min-width: 0;
+            width: 100%;
         }
 
         /* Large Tablets / Laptops (<= 1024px) */
@@ -949,6 +950,10 @@
             }
             table {
                 min-width: 460px;
+            }
+            .stat-badge-pair {
+                grid-template-columns: minmax(0, 1fr);
+                gap: 8px;
             }
         }
 
@@ -1371,7 +1376,7 @@
                     <span>1B and 3B Models Share Almost the Exact Same Subspace</span>
                 </div>
                 <p style="color: var(--text-secondary); margin-bottom: 12px;">
-                    Why does this work at all? Llama-3.2-1B ($16	ext{ layers}, 512	ext{D}$) and 3B ($28	ext{ layers}, 1024	ext{D}$) were trained on the exact same dataset with the same tokenizer. Even though 3B is larger and deeper, their internal attention Key and Value representations live in nearly identical linear subspaces:
+                    Why does this work at all? Llama-3.2-1B ($16\text{ layers}, 512\text{D}$) and 3B ($28\text{ layers}, 1024\text{D}$) were trained on the exact same dataset with the same tokenizer. Even though 3B is larger and deeper, their internal attention Key and Value representations live in nearly identical linear subspaces:
                 </p>
                 <div class="math-block">
                     $$\exists \mathbf{W}_l^* \in \mathbb{R}^{3d_1 \times d_2} \quad \text{such that} \quad \mathbb{E}_{\mathbf{S} \sim \mathcal{D}} \left[ \|\mathbf{X}_{\text{concat}}^{(1B)}(l) \mathbf{W}_l^* - \mathbf{Y}_l^{(3B)}\|_F^2 \right] \le \epsilon$$
