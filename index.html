@@ -1133,14 +1133,14 @@
             </div>
             <h1>Can We Steal a 1B Model's Memory to Speed Up a 3B Model?</h1>
             <p class="subtitle">
-                A hands-on deep dive into transplanting attention Key-Value memory from Llama-3.2-1B into Llama-3.2-3B on an Apple Mac mini (M4 Pro). We cut Time-To-First-Token (TTFT) by more than half (2.22x speedup) with &gt;99% memory accuracy — without fine-tuning or modifying either model.
+                A hands-on deep dive into transplanting attention Key-Value memory from Llama-3.2-1B into Llama-3.2-3B on an Apple Mac mini (M4 Pro). A linear map recovers roughly 70% of attention-key variance across two independently-sized models in the same family &mdash; and still cannot beat simply running the smaller model. No fine-tuning; neither model's weights are modified. Headline figures are measured on held-out data; the interactive calculator below uses the in-sample fit.
             </p>
             <div class="meta-tags">
                 <span class="meta-pill"><span>Author:</span> <a href="https://github.com/OmBansod2" target="_blank" style="color: inherit; text-decoration: none; font-weight: 700;">Om Bansod</a></span>
                 <span class="meta-pill"><span>Hardware:</span> Apple Mac mini M4 Pro (24GB RAM)</span>
-                <span class="meta-pill"><span>Key Accuracy:</span> 99.43% (Cosine: 0.9990)</span>
-                <span class="meta-pill"><span>Value Accuracy:</span> 98.53% (Cosine: 0.9944)</span>
-                <span class="meta-pill"><span>Speedup:</span> 2.22x TTFT @ 4k tokens</span>
+                <span class="meta-pill"><span>Key R&sup2; (held out):</span> 69.3% &mdash; 73.0% with 200k calibration</span>
+                <span class="meta-pill"><span>Value R&sup2; (held out):</span> 47.4% &mdash; 53.5% with 200k calibration</span>
+                <span class="meta-pill"><span>Speedup:</span> 2.22x TTFT @ 4k (full 28/28 transplant)</span>
                 <span class="meta-pill"><span>Projection Latency:</span> 31.2 ms (all 28 layers)</span>
             </div>
         </header>
@@ -1362,21 +1362,21 @@
         <!-- KPI Grid -->
         <section class="kpi-grid animated-section">
             <div class="kpi-card">
-                <div class="kpi-label">Key Memory Accuracy (R&sup2;)</div>
-                <div class="kpi-value text-emerald">99.43%</div>
-                <div class="kpi-subtext">Direction alignment: 99.90% cosine</div>
+                <div class="kpi-label">Key Memory Accuracy (R&sup2;, held out)</div>
+                <div class="kpi-value text-emerald">69.3%</div>
+                <div class="kpi-subtext">99.78% in-sample &bull; 73.0% with 200k calibration tokens</div>
             </div>
 
             <div class="kpi-card">
-                <div class="kpi-label">Value Memory Accuracy (R&sup2;)</div>
-                <div class="kpi-value text-blue">98.53%</div>
-                <div class="kpi-subtext">Direction alignment: 99.44% cosine</div>
+                <div class="kpi-label">Value Memory Accuracy (R&sup2;, held out)</div>
+                <div class="kpi-value text-blue">47.4%</div>
+                <div class="kpi-subtext">98.53% in-sample &bull; 53.5% with 200k calibration tokens</div>
             </div>
 
             <div class="kpi-card" style="animation: pulseGlow 2.5s infinite;">
                 <div class="kpi-label">Long-Context Speedup (4k tokens)</div>
                 <div class="kpi-value text-emerald">2.22x</div>
-                <div class="kpi-subtext">5.55s &rarr; 2.50s (&gt;3.0s saved per request)</div>
+                <div class="kpi-subtext">Full 28/28 transplant &bull; length-dependent &bull; quality cost exceeds the 1B floor</div>
             </div>
 
             <div class="kpi-card">

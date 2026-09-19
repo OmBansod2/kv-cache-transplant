@@ -49,3 +49,8 @@ generate_html_report.py
 
 # Logs
 *.log
+
+# local analysis notes and run logs
+FINDINGS.md
+logs_*.txt
+weights/*.pt

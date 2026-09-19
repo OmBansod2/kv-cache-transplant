@@ -2,7 +2,7 @@
 
 [![Interactive Report](https://img.shields.io/badge/Interactive_Research_Report-Live_on_GitHub_Pages-0284c7?style=for-the-badge&logo=github)](https://ombansod2.github.io/kv-cache-transplant/)
 
-**Accelerating LLM prefill by 2.22× without fine-tuning.**
+**A linear map recovers ~70% of attention-key variance across models in the same family — and still cannot beat simply running the smaller model.**
 
 **Author:** [Om Bansod](https://github.com/OmBansod2)
 
@@ -16,15 +16,116 @@ The core idea: let the small fast model (1B) process the prompt, then project it
 
 ## Key Results
 
+### Cache reconstruction
+
+The projection is fitted on calibration prompts and scored on held-out ones. Both
+columns are reported, because the in-sample figure is the one a naive setup would
+produce and the gap between them is the point: at `top_k=3` the regression fits
+1.57M parameters per layer, so a small calibration set interpolates.
+
+| calibration | KEYS in-sample | KEYS **held out** | VALUES in-sample | VALUES **held out** |
+|:---|---:|---:|---:|---:|
+| 1,406 tokens | 99.78% | **69.3%** | 98.53% | **47.4%** |
+| 199,936 tokens | — | **73.0%** | — | **53.5%** |
+
+Splits are **by prompt**, never by token: tokens inside one prompt share a context
+and their KV states are strongly correlated, so a token-level shuffle reports an
+in-sample number as held-out.
+
+### Downstream quality — WikiText-103 test, n = 200 windows
+
+Paired bootstrap CIs on per-window loss. Prefix 128 tokens, target 128 tokens.
+
+| condition | PPL | vs native 3B | 95% CI |
+|:---|---:|---:|:---|
+| native 3B (ceiling) | **9.87** | — | — |
+| **native 1B (floor)** | **12.68** | +0.2507 | [+0.2379, +0.2634] |
+| transplant, 1.4k calibration, α=1 | 253.94 | +3.2475 | [+3.1667, +3.3274] |
+| transplant, 1.4k calibration, α=100 | 39.27 | +1.3808 | [+1.3292, +1.4347] |
+| transplant, 200k calibration, α tuned | **14.87** | +0.4100 | [+0.3780, +0.4433] |
+
+**The transplant does not beat the native 1B model.** Calibration size and the
+ridge penalty dominate everything else — moving from 1,406 tokens at α=1 to 199,936
+tokens with a tuned penalty improves perplexity **17×** (253.94 → 14.87). The gap
+to the 1B floor survives that.
+
+### Source-layer count (`top_k`)
+
+Ridge penalty tuned on a separate validation split (30 fit / 10 validation /
+10 test by prompt, 3 seeds). Concatenating several 1B layers per 3B layer helps:
+
+| top_k | in_dim | KEYS test | VALUES test |
+|---:|---:|---:|---:|
+| 1 | 512 | 64.5% | 39.7% |
+| **3** (shipped) | 1536 | **69.3%** | **47.4%** |
+| 5 | 2560 | 71.1% | 49.6% |
+
+### Engineering
+
 | Metric | Result |
 |:---|:---:|
-| **Prefill Speedup @ 4,096 tokens** | **2.22×** (5.55 s → 2.50 s) |
-| **Key Cache Variance Recovery (R²)** | **99.43%** across all 28 layers |
-| **Value Cache Variance Recovery (R²)** | **98.53%** across all 28 layers |
 | **Fused 28-Layer GPU Projection** | **31.2 ms** (single 3D batched GEMM) |
-| **Scientific Domain PPL Parity** | **70.5%** of native 3B quality |
+| **Prefill Speedup @ 4,096 tokens** | 2.22× — full 28/28 transplant; see [Methodology notes](#methodology-notes) |
 | **Fine-tuning Required** | ❌ None |
 | **Quantization Required** | ❌ None |
+
+---
+
+## Methodology notes
+
+Four things that materially change the numbers, recorded because they are easy to
+get wrong.
+
+**Held-out splits must be by prompt, not by token.** Tokens inside one prompt share
+a context and their KV states are strongly correlated, so a token-level shuffle
+places near-duplicates on both sides and reports an in-sample score as held-out.
+
+**Calibration size dominates.** At `top_k=3` the projection fits 1.57M parameters
+per layer per k/v. A 1,406-token calibration set (50 prompts, mean 28 tokens) has
+fewer rows than parameters, so in-sample R² approaches 100% by interpolation.
+`calibrate_large.py` accumulates X'X and X'Y in a streaming pass, so calibration is
+unbounded in tokens at fixed memory.
+
+**The ridge penalty has to be tuned, and tuned per `top_k`.** `in_dim` ranges
+512→2560 across the sweep, so a fixed α is a different amount of regularisation at
+each k and confounds the comparison. α=100 rather than α=1 is worth a 6.5×
+perplexity improvement on its own.
+
+**Prefill savings depend on configuration and context length.** The 2.22× figure is
+the full 28/28 transplant at 4,096 tokens, where 3B prefill dominates. A hybrid
+configuration that computes upper layers natively cannot save prefill at all:
+obtaining layer 21's KV requires a full forward pass over the prefix, since there
+is no way to reach the top of a transformer without computing the bottom
+(`hybrid_transplant.py:104-111`). At shorter context the full transplant is slower
+than native 3B — `data/hybrid_benchmark_results.json` records 331.3 ms against
+187.6 ms. Always quote the configuration and the context length together.
+
+**On the MLP delta:** `FusedKVProjector` reads only `base_linear.weight`, and
+`train_mlp_mapper` excludes `base_linear` from the optimiser, so it remains the
+closed-form ridge solution. The deployed projection is pure ridge; the delta
+network does not reach it.
+
+### Analysis scripts
+
+```
+ablate_topk.py           in-sample vs held-out, single split
+ablate_topk_seeds.py     5 prompt-level splits at fixed alpha
+ablate_topk_tuned.py     3-way split, alpha tuned on validation — the result to trust
+calibrate_large.py       streaming Gram-matrix calibration, unbounded tokens, fixed memory
+build_mappers.py         ridge mappers at a chosen alpha and top_k
+evaluate_ppl_proper.py   WikiText-103 + a technical-prose set, paired bootstrap CIs
+FINDINGS.md              full write-up
+```
+
+### What the result actually is
+
+The projection's only input is the 1B's cache. The 3B's advantage over the 1B is
+exactly the information the 1B does not have, so no map — linear, MLP or otherwise
+— can recover it. A perfect projection yields 1B-level information in 3B format,
+which places the ceiling below the point of usefulness for quality-matched
+acceleration. Recovering ~70% of key variance across independently-sized models in
+one family is a real and somewhat surprising amount of shared structure; it is not
+enough to make the transplant worth using over the smaller model.
 
 ---
 
